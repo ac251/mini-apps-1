@@ -20,6 +20,10 @@ let hasWon = (playerMoves) => {
 };
 
 let movesRemain = (playerOneMoves, playerTwoMoves) => {
+  // checks whether there are possible moves left.
+  // doesn't check whether a player has won,
+  // so should be invoked only after checking whether the player who just moved has won.
+  
   let boardSize = playerOneMoves.length;
   
   let allRowsOccupied = playerOneMoves.every((curRow, idx) => (curRow | playerTwoMoves[idx] > curRow));
