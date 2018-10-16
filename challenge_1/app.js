@@ -1,18 +1,48 @@
-let playerOne = {
+// let playerOne = {
+//   name: 'player one',
+//   symbol: 'X',
+//   moves: [0, 0, 0],
+//   gamesWon: 0
+// };
+// let playerTwo = {
+//   name: 'player two',
+//   symbol: 'O',
+//   moves: [0, 0, 0],
+//   gamesWon: 0
+// };
+
+// let gamePlayers = {
+//   yourMove: playerOne,
+//   onDeck: playerTwo,
+// };
+
+let gameState = {
+  
+  playerOne: {
   name: 'player one',
   symbol: 'X',
-  moves: [0, 0, 0]
-};
-let playerTwo = {
-  name: 'player two',
-  symbol: 'O',
-  moves: [0, 0, 0]
+  moves: [0, 0, 0],
+  gamesWon: 0
+  },
+  
+  playerTwo: {
+    name: 'player two',
+    symbol: 'O',
+    moves: [0, 0, 0],
+    gamesWon: 0
+  },
+  
+  
+  // yourMove: this.playerOne,
+  // onDeck: this.playerTwo,
+  
+  
+  lastWinner: undefined
+  
 };
 
-let gamePlayers = {
-  yourMove: playerOne,
-  onDeck: playerTwo,
-};
+gameState.yourMove = gameState.playerOne;
+gameState.onDeck = gameState.playerTwo;
 
 let hasWon = (player) => {
   let playerMoves = player.moves;
@@ -71,7 +101,7 @@ let movesRemain = (playerOne, playerTwo) => {
   
 };
 
-let isLegalMove = (row, col) => {
+let isLegalMove = (playerOne, playerTwo, row, col) => {
   if (playerOne.moves[row] & (2 ** col)) {
     return false;
   }
@@ -85,14 +115,20 @@ let makeMove = (playerMoves, row, col) => {
   playerMoves[row] = playerMoves[row] | (2 ** col);
 };
 
+let swapTurns = (players) => {
+  let justPlayed = players.yourMove;
+  players.yourMove = players.onDeck;
+  players.onDeck = justPlayed;
+};
+
 let boardDisplay = (n) => {
-  let board = ''
+  let board = '';
   for (let row = 0; row < n; row ++) {
     board += '<div class="row">'
     for (let col = 0; col < n; col++) {
-      board += `<span class="square row${row} col${col}">&#9744;</span>`
+      board += `<div class="square row${row} col${col}">&#9744;</div>`;
     }
-    board += '</div>'    
+    board += '</div>';    
   }
   return board;
 };
@@ -121,65 +157,80 @@ let squareOnClick = (event) => {
     }
   });
   
-  if (!isLegalMove(row, col)) {
+  if (!isLegalMove(gameState.playerOne, gameState.playerTwo, row, col)) {
     return;
   }
   
-  makeMove(gamePlayers.yourMove.moves, row, col);
+  makeMove(gameState.yourMove.moves, row, col);
   
-  event.target.textContent = gamePlayers.yourMove.symbol;
+  event.target.textContent = gameState.yourMove.symbol;
   
-  if (hasWon(gamePlayers.yourMove)) {
-    victory(gamePlayers.yourMove);
+  if (hasWon(gameState.yourMove)) {
+    gameState.yourMove.gamesWon++;
+    gameState.lastWinner = gameState.yourMove;
+    victory(gameState.yourMove);
     gameOver = true;
-    whoseMove(gamePlayers);
+    gameState.lastWinner = gameState.yourMove;
+    whoseMove(gameState);
     return;
   } 
   
-  if (!movesRemain(gamePlayers.yourMove, gamePlayers.onDeck)) {
+  if (!movesRemain(gameState.yourMove, gameState.onDeck)) {
     itsATie();
     gameOver = true;
-    whoseMove(gamePlayers)
+    whoseMove(gameState);
     return;
   }
   
-  swapTurns(gamePlayers);
-  whoseMove(gamePlayers);
+  swapTurns(gameState);
+  whoseMove(gameState);
     
 }
 
 let victory = (player) => {
   alert(`${player.name} is the victor.`)
+  displayWins();
 }
 
 let itsATie = () => {
   alert(`It's a tie. Try again.`)
 }
 
-let swapTurns = (players) => {
-  let justPlayed = players.yourMove;
-  players.yourMove = players.onDeck;
-  players.onDeck = justPlayed;
-}
+
 
 let drawBoard = (n) => {
   document.getElementById('board').innerHTML = boardDisplay(n);
   addSquareClickHandlers();
-  playerOne.moves = Array(n);
-  playerTwo.moves = Array(n);
+  gameState.playerOne.moves = Array(n);
+  gameState.playerTwo.moves = Array(n);
   for (let i = 0; i < n; i++) {
-    playerOne.moves[i] = 0;
-    playerTwo.moves[i] = 0;
+    gameState.playerOne.moves[i] = 0;
+    gameState.playerTwo.moves[i] = 0;
   }
   gameOver = false;
+  if (gameState.lastWinner === gameState.playerTwo) {
+    gameState.yourMove = gameState.playerTwo;
+    gameState.onDeck = gameState.playerOne;
+  } else {
+    gameState.yourMove = gameState.playerOne;
+    gameState.onDeck = gameState.playerTwo;
+  }
+  gameState.yourMove.symbol = 'X';
+  gameState.onDeck.symbol = 'O';
+  whoseMove(gameState);
 };
 
 let submitHandler = (e) => {
   e.preventDefault();
-  let n = document.getElementById('number').value;
-  console.log(n);
-  if (!(Number(n))) {
+  let input = document.getElementById('number').value;
+  let n = input === '' ? 3 : Number(input);
+  if (!n) {
     alert('Please input a number!');
+    return;
+  }
+  if (n > 25) {
+    alert('That\'s a little too big!');
+    return;
   }
   drawBoard(n);  
 };
@@ -188,8 +239,14 @@ let initialize = () => {
   let form = document.getElementById('start');
   form.addEventListener('submit', (e) => submitHandler(e));
   drawBoard(3);
-  whoseMove(gamePlayers);
+  gameState.playerOne.name = promptForName('Player One');
+  gameState.playerTwo.name = promptForName('Player Two');
+  whoseMove(gameState);
 }
+
+let promptForName =(str) => {
+  return prompt(`${str}, what is your name?`, str);
+};
 
 let whoseMove = ({yourMove}) => {
   let indicator = document.getElementById('whoseMove');
@@ -199,6 +256,13 @@ let whoseMove = ({yourMove}) => {
     indicator.textContent = `Your move, ${yourMove.name}`;
   }
 }
+
+let displayWins = () => {
+  document.getElementById('playerOneScore').textContent = `${gameState.playerOne.name} has won ${gameState.playerOne.gamesWon}`;
+  document.getElementById('playerTwoScore').textContent = `${gameState.playerTwo.name} has won ${gameState.playerTwo.gamesWon}`;
+};
+
+
 
 initialize();
 
