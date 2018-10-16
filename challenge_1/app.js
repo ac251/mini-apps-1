@@ -105,7 +105,7 @@ let addSquareClickHandlers = () => {
 }
 
 let squareOnClick = (event) => {
-  debugger;
+
   let classes = event.target.classList;
   let row;
   let col;
@@ -175,7 +175,6 @@ let drawBoard = (n) => {
 };
 
 let submitHandler = (e) => {
-  debugger;
   e.preventDefault();
   let n = document.getElementById('number').value;
   console.log(n);
