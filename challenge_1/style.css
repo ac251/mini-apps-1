@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 #board {
   height: 700px;
   width: 700px;
@@ -17,6 +21,14 @@
 }
 
 .square {
-  border = 3px solid black;
+  /*border: 1px solid black;*/
   flex-grow: 1;
+  margin: 0;
+  text-align: center;
+  height: 100%;
+}
+
+#whoseMove {
+  color: red;
+  padding: 10px 0 10px 0;
 }

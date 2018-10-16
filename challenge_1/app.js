@@ -217,6 +217,7 @@ let drawBoard = (n) => {
   }
   gameState.yourMove.symbol = 'X';
   gameState.onDeck.symbol = 'O';
+  identifyPlayers();
   whoseMove(gameState);
 };
 
@@ -238,9 +239,9 @@ let submitHandler = (e) => {
 let initialize = () => {
   let form = document.getElementById('start');
   form.addEventListener('submit', (e) => submitHandler(e));
-  drawBoard(3);
   gameState.playerOne.name = promptForName('Player One');
   gameState.playerTwo.name = promptForName('Player Two');
+  drawBoard(3);
   whoseMove(gameState);
 }
 
@@ -253,13 +254,20 @@ let whoseMove = ({yourMove}) => {
   if (gameOver) {
     indicator.textContent = 'GAME OVER'
   } else {
-    indicator.textContent = `Your move, ${yourMove.name}`;
+    indicator.textContent = `Your move, ${yourMove.name}.`;
   }
 }
 
+let identifyPlayers = () => {
+  let pOneIdentifier = document.getElementById('playerOneIdentifier');
+  let pTwoIdentifier = document.getElementById('playerTwoIdentifier');
+  pOneIdentifier.textContent = `${gameState.playerOne.name} playing as ${gameState.playerOne.symbol}`;
+  pTwoIdentifier.textContent = `${gameState.playerTwo.name} playing as ${gameState.playerTwo.symbol}`;
+};
+
 let displayWins = () => {
-  document.getElementById('playerOneScore').textContent = `${gameState.playerOne.name} has won ${gameState.playerOne.gamesWon}`;
-  document.getElementById('playerTwoScore').textContent = `${gameState.playerTwo.name} has won ${gameState.playerTwo.gamesWon}`;
+  document.getElementById('playerOneScore').textContent = `${gameState.playerOne.name} has won ${gameState.playerOne.gamesWon} games.`;
+  document.getElementById('playerTwoScore').textContent = `${gameState.playerTwo.name} has won ${gameState.playerTwo.gamesWon} games.`;
 };
 
 
