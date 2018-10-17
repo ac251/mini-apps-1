@@ -6,6 +6,25 @@ let textInput = document.getElementById('textInput');
 
 let textSubmit = document.getElementById('textSubmit');
 
+let downloadLink;
+
+let lastHash;
+
+// let downloadHandler = (e) => {
+//   e.preventDefault();
+//   return fetch('/download', {
+//     method: 'POST',
+//     headers: {'content-type': 'text/plain'},
+//     body: {hash: lastHash}
+//   })
+//   .then(response => response.text())
+//   .then(text => {
+//     console.log(text);
+//     downloadLink.href = window.URL.createObjectURL(text);
+//     downloadLink.click();
+//   });
+// }
+
 let makePostRequest = (data) => {
   return fetch('/json', {
     method: 'POST',
@@ -13,10 +32,17 @@ let makePostRequest = (data) => {
     body: data
   })
   .then(response => {
-    console.log(response.body);
-    return response.text();
+    console.log(response);
+
+    return response.json();
   })
-  .then(text => results.innerHTML = text);
+  .then(json => {
+    results.innerHTML = json.html;
+    lastHash = json.hash;
+    downloadLink = document.getElementById('download');
+    downloadLink.href = '/download/' + lastHash
+    //downloadLink.addEventListener('click', downloadHandler);
+  });
 }
 
 let submitHandler = (e) => {
@@ -30,6 +56,7 @@ let clickHandler = () => {
   let data = textInput.value;
   makePostRequest(data);
 };
+
 
 
 
