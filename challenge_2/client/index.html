@@ -2,12 +2,11 @@
 <html>
 <head>
   <title>JSONtoCSV</title>
+  <link rel="stylesheet" href="./style.css"/>
 </head>
 <body>
-  <form action="/json" method="post" enctype="application/json">
-    <input type="text" value="" name="mydata" id="put your JSON right here"/>
-    <input type="submit" value="then click here!"/> 
-  </form>
+  <input type="file" id="fileSubmit">
+  <div id="serverResponse"></div>
 </body>
+<script src="./app.js"></script>
 </html>
-

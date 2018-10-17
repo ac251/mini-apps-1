@@ -1,16 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>JSONtoCSV</title>
-  <link rel="stylesheet" href="./style.css"/>
-</head>
-<body>
-  <form action="/json" method="post" enctype="application/json">
-    <textarea class="input"placeholder = "JSON goes here" rows="20" cols="100" value="" name="mydata"></textarea>
-    <input type="submit" value="then click here!"/> 
-  </form>
-  #csv#
-  <a class="download" href="/download" download="data.csv">Download your data!</a>
-</body>
-</html>
+<div>#csv#</div>
+<a class="download" href="/download" download="data.csv">Download your data!</a>
+
 

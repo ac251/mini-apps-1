@@ -58,7 +58,7 @@ module.exports = (obj) => {
     try {
       obj = JSON.parse(obj);
     } catch(err) {
-      obj = {"error message" : "invalid input, try again"};
+      return "invalid input, try again";
     }
   }
   const arrays = [];
