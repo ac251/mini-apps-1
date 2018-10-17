@@ -1,0 +1,9 @@
+.input {
+  width: 500px;
+  height: 200px;
+}
+
+.csv {
+  padding-top: 20px;
+  font-family: monospace;
+}

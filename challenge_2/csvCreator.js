@@ -1,6 +1,13 @@
 
 
 module.exports = (obj) => {
+  if (typeof obj === 'string') {
+    try {
+      obj = JSON.parse(obj);
+    } catch(err) {
+      obj = {"error message" : "invalid input, try again"};
+    }
+  }
   let csv = '';
   const arrays = [];
   const queue = [obj];
@@ -42,6 +49,6 @@ module.exports = (obj) => {
   
   return arrays.map(array => Array.from(array))
     .map(array => array.join(','))
-    .join('\n');
+    .join('<br/>');
  
 };
