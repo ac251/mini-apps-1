@@ -4,7 +4,7 @@ const path = require('path')
 const csvCreator = require('./csvCreator.js')
 
 const app = express();
-app.use(express.urlencoded())
+//app.use(express.urlencoded())
 //app.use(express.json());
 app.set('views', './views');
 
@@ -37,8 +37,7 @@ app.post('/json', (req, res) => {
   req.on('data', chunk => {
     data += chunk
   }).on('end', () => {
-    data = data.toString();
-    console.log(data);
+    console.log(typeof data);
     //data = data.slice(data.indexOf('{'), data.lastIndexOf('}') + 1)
     lastResponse = csvCreator(data);
     res.set({status: '201', 'content-type':'application/json'}).render('index', {csv: lastResponse});

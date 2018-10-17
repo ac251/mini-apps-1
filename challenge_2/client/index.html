@@ -5,7 +5,11 @@
   <link rel="stylesheet" href="./style.css"/>
 </head>
 <body>
-  <input type="file" id="fileSubmit">
+  <div><input type="file" id="fileSubmit" value="upload a file"></div>
+  <div>
+    <textarea id="textInput" placeholder="or input your JSON here" rows="20" cols="80"></textarea>
+    <button id="textSubmit" type="submit">then click here to submit</button>
+  </div>
   <div id="serverResponse"></div>
 </body>
 <script src="./app.js"></script>

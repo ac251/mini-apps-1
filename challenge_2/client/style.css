@@ -7,3 +7,17 @@
   padding-top: 20px;
   font-family: monospace;
 }
+
+.download {
+  margin-top: 20px;
+  padding: 5px 0;
+  border: 2px solid red;
+  border-radius: 3px;
+  max-width: 15%;
+  text-align: center;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}

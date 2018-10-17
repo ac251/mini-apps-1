@@ -1,4 +1,4 @@
-<div>#csv#</div>
-<a class="download" href="/download" download="data.csv">Download your data!</a>
+<div class="csv">#csv#</div>
+<div class="download"><a href="/download" download="data.csv">Download your data!</a></div>
 
 
