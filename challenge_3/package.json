@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "build": "babel ./client/app.jsx -o ./client/appCompiled.js -w"
+    "build": "babel ./client/app.jsx -o ./public/appCompiled.js -w"
   },
   "author": "",
   "license": "ISC",
@@ -17,6 +17,8 @@
     "@babel/plugin-transform-react-jsx": "^7.0.0"
   },
   "dependencies": {
+    "express": "^4.16.4",
+    "mongodb": "^3.1.8",
     "react": "^16.5.2"
   }
 }
