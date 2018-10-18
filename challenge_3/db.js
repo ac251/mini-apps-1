@@ -1,4 +1,5 @@
 const MongoClient = require('mongodb').MongoClient;
+const ObjectID = require('mongodb').ObjectID;
 
 const url = 'mongodb://localhost:27017';
 
@@ -26,7 +27,7 @@ module.exports.createRecord = (data, cb) => {
       //console.log("results from db query ", results);
       if (err) { return cb(err, null); }
       cb(null, results);
-      client.close();
+      //client.close();
     });
   });
 }
@@ -36,14 +37,14 @@ module.exports.createRecord = (data, cb) => {
 module.exports.updateRecord = (updateData, cb) => {
   client.connect((err, client) => {
     const db = client.db(dbName);
-    console.log(updateData.userId);
-    db.collection('checkoutdata').updateOne({_id: updateData.userId}, {$set: {a: 1}}, (err, response) => {
+    //console.log("USER",parseInt(updateData.userId, 16));
+    db.collection('checkoutdata').updateOne({_id: ObjectID(updateData.userId)}, {$set: updateData.data}, (err, response) => {
       if (err) {
         console.log(err);
         return cb(err);
       }
       cb(null, response);
-      client.close();
+      //client.close();
     });
   });
   
