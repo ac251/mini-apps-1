@@ -4,7 +4,7 @@
   "description": "Connect Four!",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "start": "node server.js",
     "build": "webpack --watch"
   },
@@ -22,6 +22,8 @@
     "@babel/core": "^7.1.2",
     "@babel/preset-react": "^7.0.0",
     "babel-cli": "^6.26.0",
-    "babel-loader": "^8.0.4"
+    "babel-loader": "^8.0.4",
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0"
   }
 }
