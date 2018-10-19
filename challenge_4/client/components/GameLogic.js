@@ -1,8 +1,14 @@
 class Game {
 
   constructor() {
-    this.red = [0,0,0,0,0,0];
-    this.black = [0,0,0,0,0,0];
+    this.red = {
+      moves: [0,0,0,0,0,0],
+      name: "Red"
+    };
+    this.black = {
+      moves: [0,0,0,0,0,0],
+      name: "Black"
+    };
   }
   
   toMatrix() {
@@ -10,51 +16,51 @@ class Game {
     for (let row = 0; row < 6; row++) {
       matrix[row] = [];
       for (let col = 0; col < 7; col++) {
-        matrix[row][col] = 0;
+        matrix[row][col] = 'X';
       }
     }
     
-    let matrixFiller = (player, symbol) => {
+    let matrixFiller = (moves, symbol) => {
       debugger;
       for (let row = 0; row < 6; row++) {
         for (let col = 0; col < 7; col++) {
-          if (player[row] & (2 ** col)) {
+          if (moves[row] & (2 ** col)) {
             matrix[row][col] = symbol;
           }
         }
       }
     };
     
-    matrixFiller(this.red, 'R');
-    matrixFiller(this.black, 'B');
+    matrixFiller(this.red.moves, 'R');
+    matrixFiller(this.black.moves, 'B');
     
     return matrix;
   }
   
   makeMove(player, column) {
     let rowMask = 2 ** column;
-    otherPlayer = player === this.red ? this.black : this.red;
+    let otherPlayer = player === this.red ? this.black : this.red;
     let row = -1;
-    while ((row < 5) && ((rowMask & player[row + 1]) === 0) && ((rowMask & otherPlayer[row + 1]) === 0)) {
+    while ((row < 5) && ((rowMask & player.moves[row + 1]) === 0) && ((rowMask & otherPlayer.moves[row + 1]) === 0)) {
       row++;
     }
     if (row === -1) {
       throw new Error('Invalid move, column is full');
     } else {
-      player[row] = player[row] | rowMask;
+      player.moves[row] = player.moves[row] | rowMask;
     }
     
     return[row, column];
     
   }
   
-  hasWon(player, row, col) {
+  hasWon(player, [row, col]) {
     
     let checkDown = (rowToCheck = row + 1, toCheck = 3) => {
       if (toCheck === 0) {
         return true;
       }
-      if (!(player[rowToCheck] & (2 ** col))) {
+      if (!(player.moves[rowToCheck] & (2 ** col))) {
         return false;
       }
       return checkDown(rowToCheck + 1, toCheck - 1);
@@ -62,7 +68,7 @@ class Game {
     
     let countLeft = () => {
       let count = 0;
-      while (player[row] & (2 ** (col + count + 1))) {
+      while (player.moves[row] & (2 ** (col + count + 1))) {
         count++;
       }
       return count;
@@ -70,7 +76,7 @@ class Game {
     
     let countRight = () => {
       let count = 0;
-      while (player[row] & (2 ** (col - count - 1))) {
+      while (player.moves[row] & (2 ** (col - count - 1))) {
         count++;
       }
       return count;
@@ -83,13 +89,14 @@ class Game {
       let mask = 2 ** col;
       while (flag) {
         mask = mask << 1;
-        if (player[rowToCheck] & mask) {
+        if (player.moves[rowToCheck] & mask) {
           count++;
           rowToCheck--;
         } else {
           flag = false;
         }
       }
+      return count;
     };
     
     let countRightShiftUp = (rowToCheck = row - 1) => {
@@ -98,13 +105,14 @@ class Game {
       let mask = 2 ** col;
       while (flag) {
         mask = mask >> 1;
-        if (player[rowToCheck] & mask) {
+        if (player.moves[rowToCheck] & mask) {
           count++;
           rowToCheck--;
         } else {
           flag = false;
         }
       }
+      return count;
     };
     
     let countLeftShiftDown = (rowToCheck = row + 1) => {
@@ -113,13 +121,14 @@ class Game {
       let mask = 2 ** col;
       while (flag) {
         mask = mask << 1;
-        if (player[rowToCheck] & mask) {
+        if (player.moves[rowToCheck] & mask) {
           count++;
           rowToCheck++;
         } else {
           flag = false;
         }
       }
+      return count;
     };
     
     let countRightShiftDown = (rowToCheck = row + 1) => {
@@ -128,13 +137,14 @@ class Game {
       let mask = 2 ** col;
       while (flag) {
         mask = mask >> 1;
-        if (player[rowToCheck] & mask) {
+        if (player.moves[rowToCheck] & mask) {
           count++;
           rowToCheck++;
         } else {
           flag = false;
         }
       }
+      return count;
     };
     
     if (checkDown()) {
@@ -155,6 +165,15 @@ class Game {
     
     return false;
     
+  }
+  
+  isTied() {
+    for (let i = 0; i < 6; i++) {
+      if ((this.red.moves[i] | this.black.moves[i]) !== (2 ** 7 - 1)) {
+        return false;
+      }
+    }
+    return true;
   }
 
 }
